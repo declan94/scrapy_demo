@@ -15,5 +15,10 @@ class AppSpiderSpider(scrapy.Spider):
                 yield scrapy.Request(url=url, callback=self.parse_search, meta={"app_name": app_name})
 
     def parse_search(self, response):
-        with open(response.meta["app_name"] + ".html", "w") as f:
+        detail_relative_url = response.css("a.card-click-target::attr(href)").extract_first()
+        detail_url = response.urljoin(detail_relative_url)
+        yield scrapy.Request(url=detail_url, callback=self.parse_detail, meta=response.meta)
+
+    def parse_detail(self, response):
+        with open(response.meta["app_name"] + "_detail.html", "w") as f:
             f.write(response.body)
