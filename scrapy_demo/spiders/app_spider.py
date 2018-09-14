@@ -20,5 +20,12 @@ class AppSpiderSpider(scrapy.Spider):
         yield scrapy.Request(url=detail_url, callback=self.parse_detail, meta=response.meta)
 
     def parse_detail(self, response):
-        with open(response.meta["app_name"] + "_detail.html", "w") as f:
-            f.write(response.body)
+        app = {}
+        app["name"] = response.meta["app_name"]
+        app["crawled_name"] = response.css("h1[itemprop='name'] span::text").extract_first()
+        app["icon_url"] = response.css("img.T75of[itemprop='image']::attr(src)").extract_first()
+        category_url = response.css("a[itemprop='genre']::attr(href)").extract_first()
+        if category_url:
+            app["category"] = category_url.split("/")[-1]
+        app["desc"] = response.css("div[jsname='sngebd']::text").extract_first()
+        print "\n" + str(app) + "\n"
