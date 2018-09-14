@@ -8,7 +8,10 @@
 import scrapy
 
 
-class ScrapyDemoItem(scrapy.Item):
+class AppItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    name = scrapy.Field()
+    crawled_name = scrapy.Field()
+    category = scrapy.Field()
+    icon_url = scrapy.Field()
+    desc = scrapy.Field()
