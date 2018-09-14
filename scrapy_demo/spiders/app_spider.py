@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+from scrapy_demo.items import AppItem
 
 class AppSpiderSpider(scrapy.Spider):
     name = 'app_spider'
@@ -28,4 +28,5 @@ class AppSpiderSpider(scrapy.Spider):
         if category_url:
             app["category"] = category_url.split("/")[-1]
         app["desc"] = response.css("div[jsname='sngebd']::text").extract_first()
-        print "\n" + str(app) + "\n"
+        app_item = AppItem(app)
+        yield app_item
